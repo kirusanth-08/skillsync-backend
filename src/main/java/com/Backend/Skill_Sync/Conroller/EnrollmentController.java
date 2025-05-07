@@ -35,4 +35,10 @@ public class EnrollmentController {
         return enrollmentService.getAllEnrollments();
     }
 
+    // Get enrollment count for a specific course
+    @GetMapping("/enrollments/count/{courseId}")
+    public long getEnrollmentCountByCourseId(@PathVariable String courseId) throws ExecutionException, InterruptedException {
+        return enrollmentService.countEnrollmentsByCourseId(courseId);
+    }
+
 }

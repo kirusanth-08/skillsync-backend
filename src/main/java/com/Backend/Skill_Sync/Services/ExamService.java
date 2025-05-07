@@ -69,4 +69,11 @@ public class ExamService {
         db.collection(COLLECTION_NAME).document(id).delete().get();
         return "Deleted";
     }
+
+    public int getExamCount() throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection(COLLECTION_NAME).get();
+        return future.get().size();
+    }
+
 }

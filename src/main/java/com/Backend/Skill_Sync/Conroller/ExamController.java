@@ -99,4 +99,16 @@ public class ExamController {
                     .body("Error deleting exam");
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getExamCount() {
+        try {
+            int count = examService.getExamCount();
+            return ResponseEntity.ok(count);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

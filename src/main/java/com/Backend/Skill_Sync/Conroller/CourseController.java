@@ -55,4 +55,15 @@ public class CourseController {
         int[] weeklyData = courseService.getWeeklyCourseAdditionStats();
         return ResponseEntity.ok(weeklyData);
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getCourseCount() {
+        try {
+            int count = courseService.getCourseCount();
+            return ResponseEntity.ok(count);
+        } catch (InterruptedException | ExecutionException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
 }

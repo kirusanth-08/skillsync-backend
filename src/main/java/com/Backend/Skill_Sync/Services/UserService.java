@@ -30,4 +30,10 @@ public class UserService {
 
         return userList;
     }
+
+    public int getUserCount() throws ExecutionException, InterruptedException {
+        ApiFuture<QuerySnapshot> future = firestore.collection(COLLECTION_NAME).get();
+        return future.get().size();
+    }
+
 }

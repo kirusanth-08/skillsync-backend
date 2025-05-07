@@ -30,4 +30,15 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getUserCount() {
+        try {
+            int count = userService.getUserCount();
+            return ResponseEntity.ok(count);
+        } catch (InterruptedException | ExecutionException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
 }

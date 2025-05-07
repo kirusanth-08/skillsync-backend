@@ -101,4 +101,11 @@ public class CourseService {
 
         return weeklyAdded;
     }
+
+
+    public int getCourseCount() throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        return db.collection(COLLECTION_NAME).get().get().size();
+    }
+
 }

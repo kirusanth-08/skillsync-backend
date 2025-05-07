@@ -1,5 +1,6 @@
 package com.Backend.Skill_Sync.Conroller;
 
+import com.Backend.Skill_Sync.Model.Comment;
 import com.Backend.Skill_Sync.Model.Post;
 import com.Backend.Skill_Sync.Services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,23 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        return ResponseEntity.ok(postService.createPost(post));
+    public ResponseEntity<String> createPost(@RequestBody Post post) {
+        postService.createPost(post);
+        return ResponseEntity.ok("Post successfully created");
     }
 
-    @GetMapping
+
+    @GetMapping("/allPost")
     public ResponseEntity<List<Post>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable String id) {
-        return ResponseEntity.ok(postService.getPostById(id));
+    @GetMapping("/user")
+    public ResponseEntity<Post> getPostByEmail(@RequestParam String email) {
+        return ResponseEntity.ok(postService.getPostByEmail(email));
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody Post post) {
@@ -42,4 +46,28 @@ public class PostController {
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/like")
+    public ResponseEntity<Void> likePost(@PathVariable String id) {
+        postService.likePost(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/comment")
+    public ResponseEntity<Void> addComment(@PathVariable String id, @RequestBody Comment comment) {
+        postService.addComment(id, comment);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<Post>> getTopPosts(@RequestParam(defaultValue = "5") int limit) {
+        return ResponseEntity.ok(postService.getTopPosts(limit));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getPostCount() {
+        return ResponseEntity.ok(postService.getPostCount());
+    }
+
+
 }

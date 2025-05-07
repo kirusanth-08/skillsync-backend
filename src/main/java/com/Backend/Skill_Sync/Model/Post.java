@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,5 +15,9 @@ public class Post {
     private String title;
     private String description;
     private String imageUrl;
-    private String userId;
+    private String userMail;
+    private String content;
+    private List<Comment> comments;
+    private int likes;
+    private Date createdAt;
 }

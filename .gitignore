@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Add to .gitignore
+src/main/resources/application-secrets.properties
+src/main/resources/skill-sync-e74c3-firebase-adminsdk-fbsvc-57034ab85c.json

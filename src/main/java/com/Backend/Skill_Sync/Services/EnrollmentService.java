@@ -78,4 +78,21 @@ public class EnrollmentService {
     }
 
 
+
+
+    public List<Enrollment> getEnrollmentsByCourseId(String courseId) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        List<QueryDocumentSnapshot> documents = db.collection(COLLECTION_NAME)
+                .whereEqualTo("courseId", courseId)
+                .get()
+                .get()
+                .getDocuments();
+
+        List<Enrollment> enrollments = new ArrayList<>();
+        for (QueryDocumentSnapshot doc : documents) {
+            enrollments.add(doc.toObject(Enrollment.class));
+        }
+        return enrollments;
+    }
+
 }

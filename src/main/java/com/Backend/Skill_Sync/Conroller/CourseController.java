@@ -1,11 +1,15 @@
 package com.Backend.Skill_Sync.Conroller;
 
+import com.Backend.Skill_Sync.Dto.CourseEnrollmentDTO;
 import com.Backend.Skill_Sync.Model.Course;
+import com.Backend.Skill_Sync.Model.Enrollment;
 import com.Backend.Skill_Sync.Services.CourseService;
+import com.Backend.Skill_Sync.Services.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -13,7 +17,8 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api/course")
 @CrossOrigin(origins = "*")
 public class CourseController {
-
+    @Autowired
+    private EnrollmentService enrollmentService;
     @Autowired
     private CourseService courseService;
 
@@ -65,5 +70,28 @@ public class CourseController {
             return ResponseEntity.status(500).build();
         }
     }
+
+
+
+
+
+    @GetMapping("/with-enrollments")
+    public ResponseEntity<List<CourseEnrollmentDTO>> getCoursesWithEnrollments() throws ExecutionException, InterruptedException {
+        List<Course> courses = courseService.getAllCourses();
+        List<CourseEnrollmentDTO> response = new ArrayList<>();
+
+        for (Course course : courses) {
+            List<Enrollment> enrollments = enrollmentService.getEnrollmentsByCourseId(course.getId());
+            CourseEnrollmentDTO dto = new CourseEnrollmentDTO(
+                    course.getName(),
+                    course.getCreatedAt(),
+                    enrollments
+            );
+            response.add(dto);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }

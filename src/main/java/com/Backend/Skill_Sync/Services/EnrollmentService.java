@@ -19,11 +19,27 @@ public class EnrollmentService {
 
     public Enrollment enrollStudent(String userEmail, String courseId) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
+
+        // Check if the enrollment already exists
+        List<QueryDocumentSnapshot> existingEnrollments = db.collection(COLLECTION_NAME)
+                .whereEqualTo("userEmail", userEmail)
+                .whereEqualTo("courseId", courseId)
+                .get()
+                .get()
+                .getDocuments();
+
+        if (!existingEnrollments.isEmpty()) {
+            // Enrollment already exists, return the existing one
+            return existingEnrollments.get(0).toObject(Enrollment.class);
+        }
+
+        // Proceed with new enrollment
         DocumentReference docRef = db.collection(COLLECTION_NAME).document();
         Enrollment enrollment = new Enrollment(docRef.getId(), userEmail, courseId, new Date());
         docRef.set(enrollment).get();
         return enrollment;
     }
+
 
     public List<Enrollment> getEnrollmentsByUserEmail(String userEmail) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
@@ -50,5 +66,16 @@ public class EnrollmentService {
         }
         return enrollments;
     }
+
+    public long countEnrollmentsByCourseId(String courseId) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        List<QueryDocumentSnapshot> documents = db.collection(COLLECTION_NAME)
+                .whereEqualTo("courseId", courseId)
+                .get()
+                .get()
+                .getDocuments();
+        return documents.size();  // return the count
+    }
+
 
 }
